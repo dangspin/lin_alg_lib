@@ -81,6 +81,12 @@ impl Mul<Vector2> for f64 {
     }
 }
 
+impl From<(f64, f64)> for Vector2 {
+    fn from((x, y): (f64, f64)) -> Self {
+        Self::new(x, y)
+    }
+}
+
 /// 计算两个二维向量的点积：a · b = a.x * b.x + a.y * b.y
 pub fn dot(a: &Vector2, b: &Vector2) -> f64 {
     a.x * b.x + a.y * b.y
