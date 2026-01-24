@@ -4,6 +4,7 @@ pub mod matrix;
 pub mod units;
 pub mod expr;
 pub mod iter_utils;
+pub mod path;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right
