@@ -13,6 +13,7 @@ pub struct Matrix {
 #[derive(Debug)]
 pub enum MatrixError {
     DimensionMismatch,
+    NotSquare,
 }
 
 impl Matrix {
@@ -64,6 +65,40 @@ impl Matrix {
     pub fn set(&mut self, row: usize, col: usize, value: f64) {
         let mut index = self.index(row, col);
         self.data[index] = value;
+    }
+
+    pub fn transpose(&self) -> Result<Matrix, MatrixError> {
+        let mut transposed = Matrix::zeros(self.cols(), self.rows());
+        for i in 0..self.rows() {
+            for j in 0..self.cols() {
+                transposed.set(j, i, self.get(i, j)?);
+            }
+        }
+        Ok(transposed)
+    }
+
+    pub fn identity(n: usize) -> Matrix {
+        let mut identity = Matrix::zeros(n,n);
+        for i in 0..n {
+            identity.set(i, i, 1.0);
+        }
+        identity
+    }
+
+    pub fn is_symmetric(&self, tol: f64) -> Result<bool, MatrixError> {
+        if self.rows() != self.cols() {
+            return Err(MatrixError::NotSquare);
+        }
+
+        for i in 0..self.rows() {
+            for j in (i+1)..self.cols() {
+                let diff = self.get(i, j)? - self.get(j, i)?;
+                if diff.abs() > tol {
+                    return Ok(false);
+                }
+            }
+        }
+        Ok(true)
     }
 }
 
