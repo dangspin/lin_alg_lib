@@ -15,9 +15,7 @@ pub fn polyline_length(points: &[Vector2]) -> f64 {
     if points.len() < 2 {
         return 0.0;
     }
-    points.windows(2)
-        .map(|p| {distance(&p[0], &p[1])})
-        .sum()
+    points.windows(2).map(|p| distance(&p[0], &p[1])).sum()
 }
 
 /// 计算从起点到每个点的“累计长度”。

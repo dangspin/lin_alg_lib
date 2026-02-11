@@ -1,4 +1,4 @@
-use lin_alg_lab::iter_utils::{windows, moving_average};
+use lin_alg_lab::iter_utils::{moving_average, windows};
 
 fn main() {
     let data = vec![1.0, 2.0, 3.0, 4.0, 5.0];

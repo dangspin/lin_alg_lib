@@ -10,8 +10,10 @@ use std::ops::Mul;
 //   - Matrix2x2 * Vector2 的乘法（实现 Mul<Vector2>）
 #[derive(Debug, Clone, Copy)]
 pub struct Matrix2x2 {
-    m11: f64, m12: f64,
-    m21: f64, m22: f64,
+    m11: f64,
+    m12: f64,
+    m21: f64,
+    m22: f64,
 }
 
 impl Matrix2x2 {
@@ -19,10 +21,7 @@ impl Matrix2x2 {
     ///
     /// [ m11  m12 ]
     /// [ m21  m22 ]
-    pub fn new(
-        m11: f64, m12: f64,
-        m21: f64, m22: f64,
-    ) -> Self {
+    pub fn new(m11: f64, m12: f64, m21: f64, m22: f64) -> Self {
         Self { m11, m12, m21, m22 }
     }
 
@@ -40,8 +39,10 @@ impl Matrix2x2 {
     /// [  sinθ   cosθ ]
     pub fn rotation(theta: f64) -> Self {
         Self::new(
-            f64::cos(theta), -f64::sin(theta),
-            f64::sin(theta), f64::cos(theta),
+            f64::cos(theta),
+            -f64::sin(theta),
+            f64::sin(theta),
+            f64::cos(theta),
         )
     }
 }
@@ -89,9 +90,6 @@ impl Mul for Matrix2x2 {
 
 impl From<[[f64; 2]; 2]> for Matrix2x2 {
     fn from(arr: [[f64; 2]; 2]) -> Self {
-        Self::new(
-            arr[0][0], arr[0][1],
-            arr[1][0], arr[1][1],
-        )
+        Self::new(arr[0][0], arr[0][1], arr[1][0], arr[1][1])
     }
 }

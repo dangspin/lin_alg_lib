@@ -11,7 +11,7 @@ pub fn trapezoidal_integrate(xs: &[f64], ys: &[f64]) -> f64 {
     }
 
     let mut integral = 0.0;
-    
+
     for (x, y) in xs.windows(2).zip(ys.windows(2)) {
         let x0 = x[0];
         let x1 = x[1];

@@ -1,5 +1,5 @@
-use lin_alg_lab::vector::Vector2;
 use lin_alg_lab::matrix::Matrix2x2;
+use lin_alg_lab::vector::Vector2;
 
 fn main() {
     let v = Vector2::new(1.0, 0.0);

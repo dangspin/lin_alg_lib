@@ -1,6 +1,4 @@
-use lin_alg_lab::vector::{
-    dot, norm, project_onto, distance, Vector2,
-};
+use lin_alg_lab::vector::{Vector2, distance, dot, norm, project_onto};
 
 fn main() {
     let v1 = Vector2::new(3.0, 4.0);

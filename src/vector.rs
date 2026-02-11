@@ -1,4 +1,4 @@
-use std::ops::{Add, Sub, Neg, Mul};
+use std::ops::{Add, Mul, Neg, Sub};
 // src/vector.rs
 // 你需要自己在这里定义 struct Vector2：
 // - 例如：表示一个二维向量 (x, y)
@@ -11,8 +11,8 @@ pub struct Vector2 {
 }
 
 impl Vector2 {
-    pub fn new(x:f64, y:f64) -> Self {
-        Self {x, y}
+    pub fn new(x: f64, y: f64) -> Self {
+        Self { x, y }
     }
 
     pub fn x(&self) -> f64 {

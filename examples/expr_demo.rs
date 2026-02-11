@@ -1,5 +1,5 @@
+use lin_alg_lab::expr::{EvalError, Expr, eval, to_infix};
 use std::collections::HashMap;
-use lin_alg_lab::expr::{Expr, EvalError, eval, to_infix};
 
 fn main() -> Result<(), EvalError> {
     // 假设你定义的 Expr 至少包含：
@@ -55,7 +55,6 @@ fn main() -> Result<(), EvalError> {
             // 你可以在这里匹配 EvalError::UnknownVar(name)
         }
     }
-
 
     println!("Expr demo done.");
     Ok(())

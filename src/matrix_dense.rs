@@ -14,21 +14,38 @@ pub struct Matrix {
 pub enum MatrixError {
     DimensionMismatch,
     NotSquare,
+    Singular,
 }
+
+impl std::fmt::Display for MatrixError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            MatrixError::DimensionMismatch => write!(f, "dimension mismatch"),
+            MatrixError::NotSquare => write!(f, "matrix is not square"),
+            MatrixError::Singular => write!(f, "matrix is singular"),
+        }
+    }
+}
+
+impl std::error::Error for MatrixError {}
 
 impl Matrix {
     pub fn new(rows: usize, cols: usize, data: Vec<f64>) -> Result<Self, MatrixError> {
         if data.len() != rows * cols {
             return Err(MatrixError::DimensionMismatch);
         }
-        Ok(Matrix{rows, cols, data})
+        Ok(Matrix { rows, cols, data })
     }
 
     /// 创建一个全 0 的矩阵。
     ///
     /// 大小为 rows × cols，所有元素为 0.0。
     pub fn zeros(rows: usize, cols: usize) -> Self {
-        Matrix{rows, cols, data: vec![0.0; rows * cols]}
+        Matrix {
+            rows,
+            cols,
+            data: vec![0.0; rows * cols],
+        }
     }
 
     /// 返回矩阵的行数。
@@ -58,12 +75,15 @@ impl Matrix {
     ///
     /// 这里我们先用简单版，假设调用方不越界。
     pub fn get(&self, row: usize, col: usize) -> Result<f64, MatrixError> {
-        self.data.get(self.index(row, col)).cloned().ok_or(MatrixError::DimensionMismatch)
+        self.data
+            .get(self.index(row, col))
+            .copied()
+            .ok_or(MatrixError::DimensionMismatch)
     }
 
     /// 设置 (row, col) 位置的元素为 value。
     pub fn set(&mut self, row: usize, col: usize, value: f64) {
-        let mut index = self.index(row, col);
+        let index = self.index(row, col);
         self.data[index] = value;
     }
 
@@ -78,7 +98,7 @@ impl Matrix {
     }
 
     pub fn identity(n: usize) -> Matrix {
-        let mut identity = Matrix::zeros(n,n);
+        let mut identity = Matrix::zeros(n, n);
         for i in 0..n {
             identity.set(i, i, 1.0);
         }
@@ -91,7 +111,7 @@ impl Matrix {
         }
 
         for i in 0..self.rows() {
-            for j in (i+1)..self.cols() {
+            for j in (i + 1)..self.cols() {
                 let diff = self.get(i, j)? - self.get(j, i)?;
                 if diff.abs() > tol {
                     return Ok(false);
@@ -99,6 +119,72 @@ impl Matrix {
             }
         }
         Ok(true)
+    }
+
+    pub fn lu_decomposition(&self) -> Result<(Matrix, Matrix), MatrixError> {
+        if self.rows() != self.cols() {
+            return Err(MatrixError::NotSquare);
+        }
+
+        let n = self.rows();
+        let mut l = Matrix::identity(n);
+        let mut u = self.clone();
+
+        for i in 0..n {
+            let pivot = u.get(i, i)?;
+            if pivot.abs() < 1e-12 {
+                return Err(MatrixError::Singular);
+            }
+            for j in (i + 1)..n {
+                let factor = u.get(j, i)? / pivot;
+                l.set(j, i, factor);
+                for k in i..n {
+                    u.set(j, k, u.get(j, k)? - factor * u.get(i, k)?);
+                }
+            }
+        }
+        Ok((l, u))
+    }
+
+    pub fn solve_lu(l: &Matrix, u: &Matrix, b: &[f64]) -> Result<Vec<f64>, MatrixError> {
+        if l.rows() != l.cols() || u.rows() != u.cols() {
+            return Err(MatrixError::NotSquare);
+        }
+        if l.rows() != u.rows() || l.rows() != b.len() {
+            return Err(MatrixError::DimensionMismatch);
+        }
+
+        let n = l.rows();
+
+        let mut y = vec![0.0; n];
+        for i in 0..n {
+            let mut sum = 0.0;
+            for (j, yj) in y[..i].iter().enumerate() {
+                sum += l.get(i, j)? * yj;
+            }
+            let diag = l.get(i, i)?;
+            if diag.abs() < 1e-12 {
+                return Err(MatrixError::Singular);
+            }
+            y[i] = (b[i] - sum) / diag;
+        }
+
+        let mut x = vec![0.0; n];
+        for i_rev in 0..n {
+            let i = n - 1 - i_rev;
+            let mut sum = 0.0;
+            for (offset, xj) in x[(i + 1)..].iter().enumerate() {
+                let j = i + 1 + offset;
+                sum += u.get(i, j)? * xj;
+            }
+            let diag = u.get(i, i)?;
+            if diag.abs() < 1e-12 {
+                return Err(MatrixError::Singular);
+            }
+            x[i] = (y[i] - sum) / diag;
+        }
+
+        Ok(x)
     }
 }
 

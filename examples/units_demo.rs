@@ -1,11 +1,5 @@
 use lin_alg_lab::units::{
-    LengthUnit,
-    Quantity,
-    QuantityError,
-    unit_to_meter_factor,
-    to_meters,
-    convert,
-    add,
+    LengthUnit, Quantity, QuantityError, add, convert, to_meters, unit_to_meter_factor,
 };
 
 fn main() -> Result<(), QuantityError> {

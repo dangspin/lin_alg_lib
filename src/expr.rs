@@ -40,23 +40,24 @@ pub enum EvalError {
 pub fn eval(expr: &Expr, env: &HashMap<String, f64>) -> Result<f64, EvalError> {
     match expr {
         Expr::Const(v) => Ok(*v),
-        Expr::Var(name) => {
-            env.get(name).cloned().ok_or_else(|| EvalError::UnknownVar(name.clone()))
-        },
+        Expr::Var(name) => env
+            .get(name)
+            .cloned()
+            .ok_or_else(|| EvalError::UnknownVar(name.clone())),
         Expr::Add(a, b) => {
             let a = eval(a, env)?;
             let b = eval(b, env)?;
             Ok(a + b)
-        },
+        }
         Expr::Mul(a, b) => {
             let a = eval(a, env)?;
             let b = eval(b, env)?;
             Ok(a * b)
-        },
+        }
         Expr::Neg(e) => {
             let e = eval(e, env)?;
             Ok(-e)
-        },
+        }
     }
 }
 

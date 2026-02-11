@@ -1,5 +1,5 @@
+use lin_alg_lab::path::{cumulative_lengths, polyline_length};
 use lin_alg_lab::vector::Vector2;
-use lin_alg_lab::path::{polyline_length, cumulative_lengths};
 
 fn main() {
     // 构造一条简单的折线：
@@ -8,11 +8,7 @@ fn main() {
     // 第一段长度 3
     // 第二段长度 4
     // 总长度 7
-    let points: Vec<Vector2> = vec![
-        (0.0, 0.0).into(),
-        (3.0, 0.0).into(),
-        (3.0, 4.0).into(),
-    ];
+    let points: Vec<Vector2> = vec![(0.0, 0.0).into(), (3.0, 0.0).into(), (3.0, 4.0).into()];
 
     println!("points = {:?}", points);
 

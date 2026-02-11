@@ -1,12 +1,12 @@
 // lin_alg_lab/src/lib.rs
-pub mod vector;
-pub mod matrix;
-pub mod units;
 pub mod expr;
 pub mod iter_utils;
-pub mod path;
-pub mod numeric;
+pub mod matrix;
 pub mod matrix_dense;
+pub mod numeric;
+pub mod path;
+pub mod units;
+pub mod vector;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right

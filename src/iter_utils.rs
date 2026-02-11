@@ -24,7 +24,7 @@ impl<'a> WindowIter<'a> {
                 slice,
                 window_size,
                 pos: 0,
-            }
+            };
         } else {
             Self {
                 slice,
@@ -108,7 +108,11 @@ pub fn moving_variance(data: &[f64], window_size: usize) -> Vec<f64> {
     let data_sq = data.iter().map(|x| (*x) * (*x)).collect::<Vec<f64>>();
     let mean = moving_average(data, window_size);
     let mean_sq = moving_average(&data_sq, window_size);
-    let var = mean_sq.iter().zip(mean.iter()).map(|(msq, mean)| *msq - *mean * *mean).collect::<Vec<f64>>();
+    let var = mean_sq
+        .iter()
+        .zip(mean.iter())
+        .map(|(msq, mean)| *msq - *mean * *mean)
+        .collect::<Vec<f64>>();
     var
 }
 
@@ -155,11 +159,7 @@ pub fn exponential_moving_average(data: &[f64], alpha: f64) -> Vec<f64> {
 
 /// 基于滑动窗口的简单异常检测（z-score 方法）。
 ///
-pub fn detect_1d_outliers_zscore(
-    data: &[f64],
-    window_size: usize,
-    threshold: f64,
-) -> Vec<bool> {
+pub fn detect_1d_outliers_zscore(data: &[f64], window_size: usize, threshold: f64) -> Vec<bool> {
     let n = data.len();
     if window_size == 0 || window_size > n {
         return vec![false; n];

@@ -1,10 +1,10 @@
-use lin_alg_lab::numeric::{trapezoidal_integrate, finite_differences};
+use lin_alg_lab::numeric::{finite_differences, trapezoidal_integrate};
 
 fn main() {
     // 用均匀网格在 [0, 1] 上采样 f(x) = x^2
     let n = 11;
     let xs: Vec<f64> = (0..n)
-        .map(|i| i as f64 / (n as f64 - 1.0))  // 0, 0.1, 0.2, ..., 1.0
+        .map(|i| i as f64 / (n as f64 - 1.0)) // 0, 0.1, 0.2, ..., 1.0
         .collect();
     let ys: Vec<f64> = xs.iter().map(|&x| x * x).collect();
 
@@ -16,7 +16,7 @@ fn main() {
     println!("approx integral = {}", approx_int);
     println!("true integral   = {}", 1.0 / 3.0);
 
-    assert!((approx_int - 1.0/3.0).abs() < 1e-2); // 精度要求不需要太苛刻
+    assert!((approx_int - 1.0 / 3.0).abs() < 1e-2); // 精度要求不需要太苛刻
 
     // 2. 差分近似导数，f'(x) = 2x
     let derivs = finite_differences(&xs, &ys);
