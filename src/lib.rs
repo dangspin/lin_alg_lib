@@ -7,6 +7,7 @@ pub mod numeric;
 pub mod path;
 pub mod units;
 pub mod vector;
+pub mod matrix_dense_access;
 
 pub fn add(left: u64, right: u64) -> u64 {
     left + right
